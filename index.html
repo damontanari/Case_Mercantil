@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dash — DM Invest</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #ffffff;
+      --muted: #94a3b8;
+      --accent: #0ea5a4;
+    }
+
+    body {
+      background: linear-gradient(180deg,#f8fafc 0%, #eef2f7 100%);
+      color: #0b1220;
+      -webkit-font-smoothing:antialiased;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    .topbar {
+      background: linear-gradient(90deg, rgba(14,165,164,0.12), rgba(96,165,250,0.07));
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 18px;
+      display:flex;
+      align-items:center;
+      gap:16px;
+    }
+
+    .brand {
+      font-weight:700;
+      font-size:1.1rem;
+      letter-spacing:0.2px;
+    }
+
+    .iframe-wrapper {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 */
+      height: 0;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(11,18,32,0.08);
+      background: #fff;
+      border: 1px solid rgba(11,18,32,0.04);
+    }
+
+    .iframe-wrapper iframe {
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      border:0;
+    }
+
+    .notice {
+      font-size: .9rem;
+      color: var(--muted);
+    }
+
+    .controls .btn {
+      min-width: 160px;
+    }
+
+    footer {
+      margin-top: 18px;
+      text-align:center;
+      color:var(--muted);
+      font-size:.9rem;
+    }
+
+    @media (max-width: 720px) {
+      .topbar { flex-direction: column; align-items: flex-start; gap:8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container py-4">
+    <div class="topbar">
+      <div>
+        <div class="brand">DM Invest — Dashboard</div>
+        <div class="notice">Visualização pública do relatório</div>
+      </div>
+
+      <div class="flex-grow-1"></div>
+
+      <div class="controls d-flex gap-2">
+        <a id="openPowerBI" class="btn btn-outline-primary" target="_blank" rel="noopener">Abrir no Power BI</a>
+        <a id="downloadPDF" class="btn btn-primary">Baixar PDF (via Power BI)</a>
+      </div>
+    </div>
+
+    <h3 class="mb-3">Comparativo de Investimentos — Embutido</h3>
+
+    <div class="iframe-wrapper mb-3" id="iframeContainer">
+      <!-- Cole seu iframe aqui (mantive o que você enviou) -->
+      <iframe title="Dash_Mercantil" id="dash_iframe"
+        src="https://app.powerbi.com/reportEmbed?reportId=76293b76-2df2-456e-b53f-11ffd67910c1&autoAuth=true&ctid=019b5ac2-8995-4cf5-80e0-fb2878d5c460"
+        allowfullscreen="true"></iframe>
+    </div>
+
+    <div class="card p-3 mb-4">
+      <h5>Atenção sobre compartilhamento</h5>
+      <p class="mb-1">
+        Há duas formas principais de embutir um relatório Power BI:
+      </p>
+      <ol>
+        <li><strong>Publish to web</strong> — deixa o relatório público (qualquer um com o link pode acessar). Fácil para compartilhar no GitHub Pages.</li>
+        <li><strong>Embed seguro (organização)</strong> — exige autenticação / token (Power BI Pro / service principal). Recomendado para dados sensíveis.</li>
+      </ol>
+      <p class="mb-0"><strong>Se o relatório exigir login</strong>, o iframe não carregará para usuários que não tenham permissão. Neste caso use <em>Publish to web</em> (apenas se o conteúdo for público).</p>
+    </div>
+
+    <div class="d-flex gap-3">
+      <a href="https://github.com" class="btn btn-outline-secondary" target="_blank" rel="noopener">Ver repositório</a>
+      <a href="#" class="btn btn-outline-success" id="instrBtn">Como publicar no GitHub Pages</a>
+    </div>
+
+    <footer class="mt-4">
+      Criado por Daniel • Dicas: não exponha dados sensíveis via <em>Publish to web</em>.
+    </footer>
+  </div>
+
+<script>
+  // Atualiza botões com o link do iframe real
+  const iframe = document.getElementById('dash_iframe');
+  const openBtn = document.getElementById('openPowerBI');
+  const pdfBtn = document.getElementById('downloadPDF');
+  openBtn.href = iframe.src;
+  pdfBtn.addEventListener('click', () => {
+    // abrir em nova aba a URL do relatório para usar o menu de export do Power BI
+    window.open(iframe.src, '_blank', 'noopener');
+  });
+
+  document.getElementById('instrBtn').addEventListener('click', () => {
+    alert(
+      "Passos rápidos:\n\n1) Crie um repositório no GitHub.\n2) Adicione este index.html à raiz.\n3) Faça commit & push.\n4) Vá em Settings → Pages → selecione branch main e root → Save.\nSeu site ficará em https://<seu-usuario>.github.io/<seu-repo> em alguns minutos."
+    );
+  });
+</script>
+</body>
+</html>
